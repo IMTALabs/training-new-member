@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +9,6 @@ class Product extends Model
 {
     use HasFactory;
 
-    // Nếu bạn muốn chỉ định các cột được phép gán
     protected $fillable = [
         'name',
         'category_id',
@@ -19,14 +18,12 @@ class Product extends Model
         'views',
         'description',
         'rating',
-        'status',
-        'discount_price',
-        'import_price',
+        'status', 
+        'discount_price', 
+        'import_price'
     ];
 
-    // Quan hệ với Category
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
+    public function category(){
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }
