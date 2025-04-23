@@ -192,7 +192,6 @@
                 @yield('content')
             </div>
         </div>
-https://github.com/IMTALabs/training-new-member/pull/14/conflict?name=resources%252Fviews%252Flayouts%252Fadmin.blade.php&ancestor_oid=72dabc80b3530f60e8735ea33d4edef5cacdfd38&base_oid=46b886eb9ea231fcdd05454c677107715e4ae275&head_oid=ffcc0c55574f4facace8c01675ff53bfe8e0246f
     </div>
 
     <!-- JAVASCRIPT -->

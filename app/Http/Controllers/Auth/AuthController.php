@@ -55,7 +55,6 @@ class AuthController extends Controller
             $request->session()->regenerate(); // Bảo mật session
 
             return redirect()->route('admin.dashboard');
-            // dd(Auth::user()->name);
         }
         RateLimiter::hit($key, 60);
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
