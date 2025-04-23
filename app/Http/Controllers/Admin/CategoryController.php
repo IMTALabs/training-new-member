@@ -16,13 +16,16 @@ class CategoryController extends Controller
         $query = Category::query();
 
         // Tìm kiếm
-        if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'like', '%' . $request->search . '%');
+        if ($request->has('search')) {
+            $search = $request->search;
+            if (!empty($search)) {
+                $query->where('name', 'like', '%' . $search . '%');
+            }
         }
 
         // Lọc theo trạng thái
         if ($request->has('status') && $request->status != '') {
-            $query->where('is_active', $request->status);
+            $query->where('status', $request->status == '1' ? 1 : 0);
         }
 
         // Lọc theo danh mục cha
@@ -43,8 +46,8 @@ class CategoryController extends Controller
         $query->orderBy($sortField, $sortDirection);
 
         $categories = $query->paginate(10);
-        $parentCategories = Category::whereNull('parent_id')->get();
 
-        return view('admin.categories.index', compact('categories', 'parentCategories'));
+        return view('admin.categories.index', compact('categories'));
     }
+    
 }

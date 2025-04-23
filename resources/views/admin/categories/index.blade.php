@@ -28,16 +28,6 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select name="parent_id" class="form-select">
-                                <option value="">Tất cả danh mục cha</option>
-                                @foreach($parentCategories as $parent)
-                                    <option value="{{ $parent->id }}" {{ request('parent_id') == $parent->id ? 'selected' : '' }}>
-                                        {{ $parent->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search me-1"></i> Tìm kiếm
                             </button>
@@ -68,20 +58,31 @@
                                         @endif
                                     </a>
                                 </th>
-                                <th>Ảnh</th>
-                                <th>Slug</th>
-                                <th>Mô tả</th>
                                 <th>
-                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'is_active', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-dark">
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'status', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-dark">
                                         Trạng thái
-                                        @if(request('sort') == 'is_active')
+                                        @if(request('sort') == 'status')
                                             <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
                                         @endif
                                     </a>
                                 </th>
-                                <th>Danh mục con</th>
-                                <th>Danh mục cha</th>
-                                <th class="text-center" style="width: 100px;">Thao tác</th>
+                                <th>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-dark">
+                                        Ngày tạo
+                                        @if(request('sort') == 'created_at')
+                                            <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                        @endif
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'updated_at', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-dark">
+                                        Ngày cập nhật
+                                        @if(request('sort') == 'updated_at')
+                                            <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                        @endif
+                                    </a>
+                                </th>
+                                <th class="text-center col-3" style="width: 100px;">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,55 +91,30 @@
                                     <th class="text-center" scope="row">{{ $category->id }}</th>
                                     <td>{{ $category->name }}</td>
                                     <td>
-                                        @if ($category->image)
-                                            <img src="{{ asset($category->image) }}" alt="{{ $category->name }}"
-                                                style="width: 50px; height: auto;">
-                                        @else
-                                            <span class="text-muted">Không có ảnh</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $category->slug }}</td>
-                                    <td>{{ Str::limit($category->description, 50) }}</td>
-                                    <td>
-                                        <span class="badge bg-{{ $category->is_active ? 'success' : 'danger' }}">
-                                            {{ $category->is_active ? 'Hoạt động' : 'Không hoạt động' }}
+                                        <span class="badge bg-{{ $category->status ? 'success' : 'danger' }}">
+                                            {{ $category->status ? 'Hoạt động' : 'Không hoạt động' }}
                                         </span>
                                     </td>
-                                    <td>
-                                        @if ($category->children->count() > 0)
-                                            <ul class="list-unstyled mb-0">
-                                                @foreach ($category->children as $child)
-                                                    <li>{{ $child->name }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            <span class="text-muted">Không có</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($category->parent)
-                                            {{ $category->parent->name }}
-                                        @else
-                                            <span class="text-muted">Không có</span>
-                                        @endif
-                                    </td>
+                                    <td>{{ $category->created_at->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ $category->updated_at->format('d/m/Y H:i:s') }}</td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.categories.show', $category->slug) }}"
+                                            <a href="{{ route('admin.categories.show', $category->id) }}"
                                                 class="btn btn-sm btn-secondary" title="Chi tiết">
-                                                <i class="fa fa-eye"></i>
+                                                <i class="fa fa-eye">Chi Tiết</i>
                                             </a>
-                                            <a href="{{ route('admin.categories.edit', $category->slug) }}"
+                                            <a href="{{ route('admin.categories.edit', $category->id) }}"
                                                 class="btn btn-sm btn-primary" title="Sửa">
-                                                <i class="fa fa-pencil"></i>
+                                                <i class="fa fa-pencil">Sửa</i>
                                             </a>
-                                            <form action="{{ route('admin.categories.destroy', $category->slug) }}"
-                                                method="POST" class="d-inline"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">
+                                            <form action="{{ route('admin.categories.destroy', $category->id) }}"
+                                                method="POST"
+                                                class="d-inline delete-category"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
-                                                    <i class="fa fa-trash"></i>
+                                                    <i class="fa fa-trash">Xóa</i>
                                                 </button>
                                             </form>
                                         </div>
@@ -146,7 +122,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="text-center">Không có danh mục nào</td>
+                                    <td colspan="6" class="text-center">Không có danh mục nào</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -169,6 +145,63 @@
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 window.location.href = this.href;
+            });
+        });
+
+        // Xử lý xóa danh mục
+        document.querySelectorAll('.delete-category').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const url = form.getAttribute('action');
+
+                // Gửi request kiểm tra trước khi xóa
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'confirm') {
+                        // Hiển thị hộp thoại xác nhận
+                        if (confirm(data.message)) {
+                            // Nếu người dùng xác nhận, gửi request xóa với flag xác nhận
+                            fetch(url + '?confirm_delete=1', {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    // Reload trang sau khi xóa thành công
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message);
+                                }
+                            })
+                            .catch(error => {
+                                alert('Có lỗi xảy ra khi xóa danh mục');
+                            });
+                        }
+                    } else if (data.status === 'success') {
+                        // Nếu không cần xác nhận và xóa thành công
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Có lỗi xảy ra khi xóa danh mục');
+                });
             });
         });
     </script>
