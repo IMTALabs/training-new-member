@@ -2,14 +2,11 @@
 
 
 use App\Http\Controllers\Admin\ProductController;
-
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
-
-
-
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -33,11 +30,15 @@ Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail'])->n
 Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
 
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
   Route::get('/', function () {
         return 'chao mung den trang qtri';
     });
   Route::get('/dashboard',          [DashboardController::class, 'index'])->name('dashboard');
+  //category
   Route::prefix('categories')->name('categories.')->group(function () {
     Route::get('/',             [CategoryController::class, 'index'])->name('index');
     Route::get('/create',       [CategoryController::class, 'create'])->name('create');
@@ -45,10 +46,18 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/{id}/edit',    [CategoryController::class, 'edit'])->name('edit');
     Route::put('/{id}',         [CategoryController::class, 'update'])->name('update');
     });
+  //product
   Route::prefix('products') ->middleware(['auth'])->name('products.')->group(function () { 
+
     Route::get('/create', [ProductController::class, 'create'])->name('create');
     Route::post('/store', [ProductController::class, 'store'])->name('store');
     Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('edit');
     Route::put('/{id}/update', [ProductController::class, 'update'])->name('update');
-    });
+  });
+  //user
+  Route::prefix('user') ->name('user.')->group(function () {
+      Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+      Route::put('/{id}/update', [UserController::class, 'update'])->name('update');
+  });
 });
+

@@ -84,6 +84,7 @@
                                         <span
                                             class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name ?? 'Tên Người Dùng' }}</span>
                                     </span>
+                                    
                                 </span>
                             </button>
                         </div>
@@ -166,8 +167,8 @@
                             <div class="collapse menu-dropdown" id="sidebarProducts">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="" class="nav-link fs-5" data-key="t-analytics"
-                                            data-title="Products > List Products">List User</a>
+                                        <a href="{{ route('admin.user.edit', ['id' => Auth::user()->id]) }}" class="nav-link fs-5" data-key="t-analytics"
+                                            data-title="User > edit User"> edit User</a>
                                     </li>
                                 </ul>
                             </div>
@@ -232,7 +233,9 @@
     <script src="{{ asset('assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
 
     <!-- App js -->
-    <script src="{{ asset('assets/js/app.js') }}"></script>
+
+    <script src="{{asset('assets/js/app.js')}}"></script>
+
 </body>
 
 </html>
