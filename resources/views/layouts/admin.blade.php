@@ -70,7 +70,7 @@
                                 <span></span>
                             </span>
                         </button> --}}
-                        <div id="page-title" class="page-title h4 fw-bold ms-3 mt-1">Dashboard</div>
+                        <div id="page-title" class="page-title h4 fw-bold ms-3 mt-1">@yield('page-title', 'Dashboard')</div>
                     </div>
 
                     <div class="d-flex align-items-center">
@@ -146,12 +146,28 @@
                             <div class="collapse menu-dropdown" id="sidebarProducts">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link fs-5" data-key="t-analytics"
+                                        <a href="{{route('admin.product.listProducts')}}" class="nav-link fs-5" data-key="t-analytics"
                                             data-title="Products > List Products">List Products</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link fs-5" data-key="t-crm"
+                                        <a href="{{route('admin.products.create')}}" class="nav-link fs-5" data-key="t-crm"
                                             data-title="Products > Add Product">Add Product</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                         <!-- user -->
+                         <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarProducts" data-bs-toggle="collapse"
+                                role="button" aria-expanded="false" aria-controls="sidebarProducts">
+                                <i class="ri-dashboard-2-line"></i> <span class="fs-4">User</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarProducts">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link fs-5" data-key="t-analytics"
+                                            data-title="Products > List Products">List User</a>
                                     </li>
                                 </ul>
                             </div>
@@ -176,7 +192,7 @@
                 @yield('content')
             </div>
         </div>
-
+https://github.com/IMTALabs/training-new-member/pull/14/conflict?name=resources%252Fviews%252Flayouts%252Fadmin.blade.php&ancestor_oid=72dabc80b3530f60e8735ea33d4edef5cacdfd38&base_oid=46b886eb9ea231fcdd05454c677107715e4ae275&head_oid=ffcc0c55574f4facace8c01675ff53bfe8e0246f
     </div>
 
     <!-- JAVASCRIPT -->
@@ -194,6 +210,7 @@
             });
         });
     </script>
+
 
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>

@@ -53,6 +53,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             RateLimiter::clear($key); // Xóa đếm khi đăng nhập thành công
             $request->session()->regenerate(); // Bảo mật session
+
             return redirect()->route('admin.dashboard');
             // dd(Auth::user()->name);
         }
