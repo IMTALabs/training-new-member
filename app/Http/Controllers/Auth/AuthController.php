@@ -53,7 +53,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             RateLimiter::clear($key); // Xóa đếm khi đăng nhập thành công
             $request->session()->regenerate(); // Bảo mật session
-            return redirect()->intended('/');
+            return redirect()->route('admin.dashboard');
             // dd(Auth::user()->name);
         }
         RateLimiter::hit($key, 60);
@@ -64,7 +64,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('login');
     }
     public function showRegisterForm()
     {
