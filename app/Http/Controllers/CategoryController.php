@@ -24,7 +24,11 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::where('id', $id)->first();
+        if (!$category) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Category not found');
+        }
         return view('admin.categories.edit', compact('category'));
     }
 
