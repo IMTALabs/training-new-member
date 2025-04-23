@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -14,16 +14,12 @@ class CategoryController extends Controller
         return view('admin.categories.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-        ]);
         // Thêm dữ liệu
-        Category::create($validatedData);
+        Category::create($request->validated());
 
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category has been created successfully');
     }
 
     public function edit($id)
@@ -32,16 +28,10 @@ class CategoryController extends Controller
         return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
         $category = Category::findOrFail($id);
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-        ]);
-        // Cập nhật dữ liệu
-        $category->update($validatedData);
-
-        return redirect()->route('admin.categories.index');
+        $category->update($request->validated());
+        return redirect()->route('admin.categories.index')->with('success', 'Category has been updated successfully');
     }
 }
