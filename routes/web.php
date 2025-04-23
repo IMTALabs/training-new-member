@@ -1,12 +1,23 @@
 <?php
 
+
 use App\Http\Controllers\Admin\ProductController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    });
+    Route::prefix('products')->name('product.')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('listProducts');
+        Route::delete('/{id}', [ProductController::class, 'destroy'])->name('destroy');
+    });
 });
 
 Route::get('/login',       [AuthController::class, 'showLoginForm'])->name('login');

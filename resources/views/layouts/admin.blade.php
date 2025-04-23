@@ -70,7 +70,7 @@
                                 <span></span>
                             </span>
                         </button> --}}
-                        <div id="page-title" class="page-title h4 fw-bold ms-3 mt-1">Dashboard</div>
+                        <div id="page-title" class="page-title h4 fw-bold ms-3 mt-1">@yield('page-title', 'Dashboard')</div>
                     </div>
 
                     <div class="d-flex align-items-center">
@@ -142,7 +142,7 @@
                             <div class="collapse menu-dropdown" id="sidebarProducts">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link fs-5" data-key="t-analytics"
+                                        <a href="{{route('admin.product.listProducts')}}" class="nav-link fs-5" data-key="t-analytics"
                                             data-title="Products > List Products">List Products</a>
                                     </li>
                                     <li class="nav-item">
@@ -192,20 +192,6 @@
     </div>
 
     <!-- JAVASCRIPT -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const titleElement = document.getElementById("page-title");
-    
-            document.querySelectorAll('[data-title]').forEach(link => {
-                link.addEventListener("click", function (e) {
-                    const title = this.getAttribute("data-title");
-                    if (titleElement && title) {
-                        titleElement.textContent = title;
-                    }
-                });
-            });
-        });
-    </script>
 
     <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
