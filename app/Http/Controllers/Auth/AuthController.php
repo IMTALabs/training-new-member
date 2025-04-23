@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Log;
@@ -34,14 +38,9 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
 
-        // Giới hạn 6 lần/phút
+    public function login(LoginRequest $request)
+    {
         $key = 'login-attempts:' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 6)) {
             $seconds = RateLimiter::availableIn($key);
@@ -50,15 +49,16 @@ class AuthController extends Controller
             ]);
         }
 
-        if (Auth::attempt($credentials)) {
-            RateLimiter::clear($key); // Xóa đếm khi đăng nhập thành công
-            $request->session()->regenerate(); // Bảo mật session
+        if (Auth::attempt($request->validated())) {
+            RateLimiter::clear($key);
+            $request->session()->regenerate();
             return redirect()->intended('/');
-            dd(Auth::user()->name);
         }
+
         RateLimiter::hit($key, 60);
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
     }
+
     public function logout(Request $request)
     {
         Auth::logout();
@@ -66,87 +66,55 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect('/login');
     }
+
     public function showRegisterForm()
     {
         return view('auth.register');
     }
-    public function register(Request $request)
+
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8) // độ dài tối thiểu
-                    ->mixedCase() // chữ hoa, chữ thường
-                    ->letters() // chứa chữ
-                    ->numbers() // chứa số
-                    ->symbols() // chứa ký tự đặc biệt
-            ],
-            'date_of_birth' => 'nullable|date',
-            'gender' => 'nullable|string',
-            'phone_number' => 'nullable|string',
-            'address' => 'nullable|string'
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
             'avatar' => null,
-            'date_of_birth' => $request->date_of_birth,
-            'gender' => $request->gender,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address,
+            'date_of_birth' => $validated['date_of_birth'],
+            'gender' => $validated['gender'],
+            'phone_number' => $validated['phone_number'],
+            'address' => $validated['address'],
             'role' => $request->role ?? 'user',
             'status' => '1',
         ]);
-        //  dd($user);
+
         Auth::attempt([
             'email' => $user->email,
-            'password' => $user->password,
-
+            'password' => $validated['password'],
         ]);
-        // dd($user);
-        $key = 'login-attempts:' . $request->ip();
-        RateLimiter::clear($key); // Xóa đếm khi đăng nhập thành công
-        $request->session()->regenerate(); // Bảo mật session
-        return redirect()->intended('/');
-        // dd(Auth::user()->name);
 
+        $key = 'login-attempts:' . $request->ip();
+        RateLimiter::clear($key);
+        $request->session()->regenerate();
+        return redirect()->intended('/');
     }
 
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
-        // Thêm rate limiting
         $key = 'password-reset:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 3)) { // 3 lần/phút
+        if (RateLimiter::tooManyAttempts($key, 3)) {
             $seconds = RateLimiter::availableIn($key);
             return back()->withErrors(['email' => "Vui lòng đợi {$seconds} giây trước khi thử lại."]);
         }
 
-        RateLimiter::hit($key, 60); // Tăng số lần thử trong 60 giây
-
-        // Validate đầu vào
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ], [
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Email không đúng định dạng',
-            'email.exists' => 'Email này không tồn tại trong hệ thống'
-        ]);
+        RateLimiter::hit($key, 60);
 
         try {
-            // Lấy email từ input của người dùng
-            $userEmail = $request->input('email');
-
-            // Gửi link reset password
             $status = PasswordFacade::sendResetLink(
-                ['email' => $userEmail]
+                ['email' => $request->email]
             );
 
-            // Kiểm tra kết quả và trả về response phù hợp
             if ($status === PasswordFacade::RESET_LINK_SENT) {
                 return back()->with('status', 'Chúng tôi đã gửi email khôi phục mật khẩu cho bạn!');
             } else {
@@ -165,14 +133,8 @@ class AuthController extends Controller
         );
     }
 
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
         $status = PasswordFacade::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {

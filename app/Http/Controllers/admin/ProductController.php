@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\admin\Category;
-use App\Services\ProductService;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Services\ProductService;
+use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
@@ -15,10 +15,11 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
     }
-    
-    public function index(Request $request){
+
+    public function index(Request $request)
+    {
         $products = $this->productService->getAllProduct($request);
-        $categories = Category::all(); 
+        $categories = Category::all();
         return view('admin.products.listProduct', compact('products', 'categories'));
     }
 

@@ -15,7 +15,7 @@
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Tên Sản Phẩm</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                               value="{{ old('name', $product->name) }}">
+                            value="{{ old('name', $product->name) }}">
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -40,7 +40,7 @@
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Giá Gốc</label>
                         <input type="number" name="price" class="form-control @error('price') is-invalid @enderror"
-                               value="{{ old('price', $product->price) }}">
+                            value="{{ old('price', $product->price) }}">
                         @error('price')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -49,19 +49,19 @@
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Giá Nhập</label>
                         <input type="number" name="import_price" class="form-control"
-                               value="{{ old('import_price', $product->import_price) }}">
+                            value="{{ old('import_price', $product->import_price) }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Giá Khuyến Mãi</label>
                         <input type="number" name="discount_price" class="form-control"
-                               value="{{ old('discount_price', $product->discount_price) }}">
+                            value="{{ old('discount_price', $product->discount_price) }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Số Lượng</label>
                         <input type="number" name="quantity" class="form-control @error('quantity') is-invalid @enderror"
-                               value="{{ old('quantity', $product->quantity) }}">
+                            value="{{ old('quantity', $product->quantity) }}">
                         @error('quantity')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -70,8 +70,10 @@
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Trạng Thái</label>
                         <select name="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Hiện</option>
-                            <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Ẩn</option>
+                            <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Hiện
+                            </option>
+                            <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>
+                                Ẩn</option>
                         </select>
                         @error('status')
                             <div class="text-danger">{{ $message }}</div>
