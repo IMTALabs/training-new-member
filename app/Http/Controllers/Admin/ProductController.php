@@ -7,16 +7,12 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,21 +27,9 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'import_price' => 'nullable|numeric|min:0',
-            'price' => 'required|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0|lt:price',
-            'quantity' => 'required|integer|min:0',
-            'views' => 'nullable|integer|min:0',
-            'rating' => 'nullable|numeric|min:0|max:5',
-            'status' => 'required|in:active,inactive',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'description' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         // Xử lý upload ảnh
         if ($request->hasFile('image')) {
@@ -59,13 +43,7 @@ class ProductController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -80,55 +58,38 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
         $product = Product::findOrFail($id);
+        
+        // Validate dữ liệu
+        $validated = $request->validated();
 
-    // Validate dữ liệu
-    $request->validate([
-        'name'           => 'required|string|max:255',
-        'category_id'    => 'required|exists:categories,id',
-        'price'          => 'required|numeric',
-        'import_price'   => 'nullable|numeric',
-        'discount_price' => 'nullable|numeric',
-        'quantity'       => 'required|integer|min:0',
-        'status'         => 'required|string',
-        'description'    => 'nullable|string',
-        'image'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-    ]);
+        $product->fill($validated);
+        // Cập nhật thông tin
+        $product->name           = $request->name;
+        $product->category_id    = $request->category_id;
+        $product->price          = $request->price;
+        $product->import_price   = $request->import_price;
+        $product->discount_price = $request->discount_price;
+        $product->quantity       = $request->quantity;
+        $product->status         = $request->status;
+        $product->description    = $request->description;
 
-    // Cập nhật thông tin
-    $product->name           = $request->name;
-    $product->category_id    = $request->category_id;
-    $product->price          = $request->price;
-    $product->import_price   = $request->import_price;
-    $product->discount_price = $request->discount_price;
-    $product->quantity       = $request->quantity;
-    $product->status         = $request->status;
-    $product->description    = $request->description;
+        // Xử lý ảnh nếu có upload mới
+        if ($request->hasFile('image')) {
+            // Xóa ảnh cũ nếu tồn tại
+            if ($product->image && Storage::exists('public/' . $product->image)) {
+                Storage::delete('public/' . $product->image);
+            }
 
-    // Xử lý ảnh nếu có upload mới
-    if ($request->hasFile('image')) {
-        // Xóa ảnh cũ nếu tồn tại
-        if ($product->image && Storage::exists('public/' . $product->image)) {
-            Storage::delete('public/' . $product->image);
+            // Lưu ảnh mới
+            $imagePath = $request->file('image')->store('products', 'public');
+            $product->image = $imagePath;
         }
 
-        // Lưu ảnh mới
-        $imagePath = $request->file('image')->store('products', 'public');
-        $product->image = $imagePath;
-    }
+        $product->save();
 
-    $product->save();
-
-    return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
 }

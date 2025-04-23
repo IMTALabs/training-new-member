@@ -20,6 +20,9 @@ Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail'])->n
 Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [AuthController::class, 'reset'])->name('password.update');
 
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
 // admin 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -29,7 +32,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::prefix('products')->name('products.')->group(function () {
+    Route::prefix('products') ->middleware(['auth'])->name('products.')->group(function () {
     Route::get('/create', [ProductController::class, 'create'])->name('create');
     Route::post('/store', [ProductController::class, 'store'])->name('store');
     Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('edit');
