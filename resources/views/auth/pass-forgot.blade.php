@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+    data-sidebar-image="none" data-preloader="disable">
 
 <head>
 
@@ -32,7 +33,8 @@
             <div class="bg-overlay"></div>
 
             <div class="shape">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 1440 120">
                     <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
                 </svg>
             </div>
@@ -46,7 +48,8 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="#" class="d-inline-block auth-logo">
-                                    <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="20">
+                                    <img src="{{ asset('assets/images/logo-light.png') }}" alt=""
+                                        height="20">
                                 </a>
                             </div>
                             <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
@@ -64,7 +67,8 @@
                                     <h5 class="text-primary">Forgot Password?</h5>
                                     <p class="text-muted">Reset password with velzon</p>
 
-                                    <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop" colors="primary:#0ab39c" class="avatar-xl"></lord-icon>
+                                    <lord-icon src="https://cdn.lordicon.com/rhvddzym.json" trigger="loop"
+                                        colors="primary:#0ab39c" class="avatar-xl"></lord-icon>
 
                                 </div>
 
@@ -72,16 +76,31 @@
                                     Enter your email and instructions will be sent to you!
                                 </div>
                                 <div class="p-2">
-                                    <form>
+                                    <form action="{{ route('password.email') }}" method="POST">
+                                        @csrf
                                         <div class="mb-4">
                                             <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="email" placeholder="Enter Email">
+                                            <input type="email"
+                                                class="form-control @error('email') is-invalid @enderror" name="email"
+                                                value="{{ old('email') }}" placeholder="Nhập email của bạn" required>
+                                            @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
 
+                                        @if (session('status'))
+                                            <div class="alert alert-success" role="alert">
+                                                {{ session('status') }}
+                                            </div>
+                                        @endif
+
                                         <div class="text-center mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Send Reset Link</button>
+                                            <button class="btn btn-success w-100" type="submit">Gửi Link Đặt
+                                                Lại</button>
                                         </div>
-                                    </form><!-- end form -->
+                                    </form>
                                 </div>
                             </div>
                             <!-- end card body -->
@@ -89,7 +108,8 @@
                         <!-- end card -->
 
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Wait, I remember my password... <a href="#" class="fw-semibold text-primary text-decoration-underline"> Click here </a> </p>
+                            <p class="mb-0">Đợi đã, tôi nhớ mật khẩu của mình... <a href="{{ route('login') }}"
+                                    class="fw-semibold text-primary text-decoration-underline"> Nhấn vào đây </a> </p>
                         </div>
 
                     </div>
@@ -107,7 +127,10 @@
                     <div class="col-lg-12">
                         <div class="text-center">
                             <p class="mb-0 text-muted">&copy;
-                                <script>document.write(new Date().getFullYear())</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                                <script>
+                                    document.write(new Date().getFullYear())
+                                </script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i>
+                                by Themesbrand
                             </p>
                         </div>
                     </div>

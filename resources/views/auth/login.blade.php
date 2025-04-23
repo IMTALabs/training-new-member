@@ -79,7 +79,7 @@
 
                                         <div class="mb-3">
                                             <div class="float-end">
-                                                <a href="" class="text-muted">Forgot password?</a>
+                                                <a href="{{ route('password.request') }}" class="text-muted">Forgot password?</a>
                                             </div>
                                             <label class="form-label" for="password">Password</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">

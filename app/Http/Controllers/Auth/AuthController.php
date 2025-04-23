@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Password as PasswordFacade;
 
 class AuthController extends Controller
 {
@@ -18,10 +24,6 @@ class AuthController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function showResetForm()
-    {
-        return view('auth.pass-reset');
-    }
 
     public function showForgotPassword()
     {
@@ -113,5 +115,94 @@ class AuthController extends Controller
         return redirect()->intended('/');
         // dd(Auth::user()->name);
 
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        // Thêm rate limiting
+        $key = 'password-reset:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($key, 3)) { // 3 lần/phút
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['email' => "Vui lòng đợi {$seconds} giây trước khi thử lại."]);
+        }
+
+        RateLimiter::hit($key, 60); // Tăng số lần thử trong 60 giây
+
+        // Validate đầu vào
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.required' => 'Vui lòng nhập email',
+            'email.email' => 'Email không đúng định dạng',
+            'email.exists' => 'Email này không tồn tại trong hệ thống'
+        ]);
+
+        try {
+            // Lấy email từ input của người dùng
+            $userEmail = $request->input('email');
+
+            // Gửi link reset password
+            $status = PasswordFacade::sendResetLink(
+                ['email' => $userEmail]
+            );
+
+            // Kiểm tra kết quả và trả về response phù hợp
+            if ($status === PasswordFacade::RESET_LINK_SENT) {
+                return back()->with('status', 'Chúng tôi đã gửi email khôi phục mật khẩu cho bạn!');
+            } else {
+                return back()->withErrors(['email' => __($status)]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Password Reset Error: ' . $e->getMessage());
+            return back()->withErrors(['email' => 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.']);
+        }
+    }
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        return view('auth.pass-reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+    }
+
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = PasswordFacade::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === PasswordFacade::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    private function debugMailSetup()
+    {
+        try {
+            Mail::raw('Test email content', function (Message $message) {
+                $message->to('namvtph51016@gmail.com')
+                    ->subject('Test Email');
+            });
+            Log::info('Email sent successfully');
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Mail Error: ' . $e->getMessage());
+            return false;
+        }
     }
 }

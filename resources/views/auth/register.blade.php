@@ -1,15 +1,10 @@
 <!doctype html>
-<html lang="en"
-    data-layout="vertical"
-    data-topbar="light"
-    data-sidebar="dark"
-    data-sidebar-size="lg"
-    data-sidebar-image="none"
-    data-preloader="disable">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+    data-sidebar-image="none" data-preloader="disable">
 
 <head>
     <meta charset="utf-8" />
-    <title>Sign Up  </title>
+    <title>Sign Up </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -21,7 +16,7 @@
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
-    
+
 
 </head>
 
@@ -56,93 +51,109 @@
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-primary">Create New Account</h5>
-                                   
+
                                 </div>
 
                                 <div class="p-2 mt-4">
-                                    <form method="POST" action="{{route('register.post')}}" class="needs-validation" novalidate>
+                                    <form method="POST" action="{{ route('register.post') }}" class="needs-validation"
+                                        novalidate>
                                         @csrf
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter email address" required value="{{ old('email') }}">
+                                            <label for="email" class="form-label">Email <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="email" name="email"
+                                                class="form-control @error('email') is-invalid @enderror" id="email"
+                                                placeholder="Enter email address" required value="{{ old('email') }}">
                                             @error('email')
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        
+
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Username <span class="text-danger">*</span></label>
-                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter name" required value="{{ old('name') }}">
+                                            <label for="name" class="form-label">Username <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" name="name"
+                                                class="form-control @error('name') is-invalid @enderror" id="name"
+                                                placeholder="Enter name" required value="{{ old('name') }}">
                                             @error('name')
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        
+
                                         <div class="mb-3">
                                             <label class="form-label" for="password">Password</label>
                                             <div class="position-relative auth-pass-inputgroup">
-                                                <input type="password" name="password" class="form-control pe-5 password-input @error('password') is-invalid @enderror" placeholder="Enter password" id="password" required>
-                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                                <input type="password" name="password"
+                                                    class="form-control pe-5 password-input @error('password') is-invalid @enderror"
+                                                    placeholder="Enter password" id="password" required>
+                                                <button
+                                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                                    type="button" id="password-addon"><i
+                                                        class="ri-eye-fill align-middle"></i></button>
                                                 @error('password')
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="password_confirmation">Confirm Password</label>
+                                            <label class="form-label" for="password_confirmation">Confirm
+                                                Password</label>
                                             <div class="position-relative auth-pass-inputgroup">
-                                                <input type="password" name="password_confirmation" class="form-control pe-5 password-input" placeholder="Confirm password" id="password_confirmation" required>
+                                                <input type="password" name="password_confirmation"
+                                                    class="form-control pe-5 password-input"
+                                                    placeholder="Confirm password" id="password_confirmation" required>
                                                 <div class="invalid-feedback">Please confirm password</div>
                                             </div>
                                         </div>
                                         {{-- Date of Birth --}}
-                                            <div class="mb-3">
-                                                <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                                <input type="date" name="date_of_birth" class="form-control">
-                                            </div>
+                                        <div class="mb-3">
+                                            <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                            <input type="date" name="date_of_birth" class="form-control">
+                                        </div>
 
-                                            {{-- Gender --}}
-                                            <div class="mb-3">
-                                                <label class="form-label">Gender</label>
-                                                <select name="gender" class="form-select">
-                                                    <option value="">Select gender</option>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
-                                                </select>
-                                            </div>
+                                        {{-- Gender --}}
+                                        <div class="mb-3">
+                                            <label class="form-label">Gender</label>
+                                            <select name="gender" class="form-select">
+                                                <option value="">Select gender</option>
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                            </select>
+                                        </div>
 
-                                            {{-- Phone Number --}}
-                                            <div class="mb-3">
-                                                <label for="phone_number" class="form-label">Phone Number</label>
-                                                <input type="text" name="phone_number" class="form-control">
-                                            </div>
+                                        {{-- Phone Number --}}
+                                        <div class="mb-3">
+                                            <label for="phone_number" class="form-label">Phone Number</label>
+                                            <input type="text" name="phone_number" class="form-control">
+                                        </div>
 
-                                            {{-- Address --}}
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label">Address</label>
-                                                <textarea name="address" class="form-control" rows="2"></textarea>
-                                            </div>
+                                        {{-- Address --}}
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea name="address" class="form-control" rows="2"></textarea>
+                                        </div>
 
-                                            {{-- Role (ẩn vì mặc định là user) --}}
-                                            <input type="hidden" name="role" value="user">
+                                        {{-- Role (ẩn vì mặc định là user) --}}
+                                        <input type="hidden" name="role" value="user">
 
-                                            {{-- Status (ẩn hoặc mặc định active) --}}
-                                            <input type="hidden" name="status" value="1">
-                                        
-                                        
+                                        {{-- Status (ẩn hoặc mặc định active) --}}
+                                        <input type="hidden" name="status" value="1">
+
+
 
                                         <div class="mt-4">
                                             <button class="btn btn-success w-100" type="submit">Sign Up</button>
                                         </div>
 
-                                       
+
                                     </form>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Already have an account ? <a href="" class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+                            <p class="mb-0">Already have an account ? <a href=""
+                                    class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
                         </div>
                     </div>
                 </div>
@@ -154,7 +165,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <p class="mb-0 text-muted">&copy; {{ date('Y') }}  Crafted with <i class="mdi mdi-heart text-danger"></i> </p>
+                        <p class="mb-0 text-muted">&copy; {{ date('Y') }} Crafted with <i
+                                class="mdi mdi-heart text-danger"></i> </p>
                     </div>
                 </div>
             </div>
