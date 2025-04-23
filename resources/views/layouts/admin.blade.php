@@ -152,6 +152,21 @@
                                 </ul>
                             </div>
                         </li>
+                         <!-- user -->
+                         <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarProducts" data-bs-toggle="collapse"
+                                role="button" aria-expanded="false" aria-controls="sidebarProducts">
+                                <i class="ri-dashboard-2-line"></i> <span class="fs-4">User</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarProducts">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link fs-5" data-key="t-analytics"
+                                            data-title="Products > List Products">List User</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
 
                 </div>

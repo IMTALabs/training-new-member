@@ -54,7 +54,7 @@ class AuthController extends Controller
             RateLimiter::clear($key); // Xóa đếm khi đăng nhập thành công
             $request->session()->regenerate(); // Bảo mật session
             return redirect()->intended('/');
-            // dd(Auth::user()->name);
+            dd(Auth::user()->name);
         }
         RateLimiter::hit($key, 60);
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
