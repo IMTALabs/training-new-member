@@ -10,24 +10,24 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- jsvectormap css -->
-    <link href="{{asset('assets/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 
     <!--Swiper slider css-->
-    <link href="{{asset('assets/libs/swiper/swiper-bundle.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- Layout config Js -->
-    <script src="{{asset('assets/js/layout.js')}}"></script>
+    <script src="{{ asset('assets/js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
-    <link href="{{asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
-    <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="{{asset('assets/css/app.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
-    <link href="{{asset('assets/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -75,22 +75,27 @@
 
                     <div class="d-flex align-items-center">
                         <div class="dropdown ms-1 topbar-head-dropdown header-item">
-                            <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="d-flex align-items-center">
                                     <img class="rounded-circle header-profile-user"
                                         src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
                                     <span class="text-start ms-xl-2">
-                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{
-                                            Auth::user()->name ?? 'Tên Người Dùng' }}</span>
+                                        <span
+                                            class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name ?? 'Tên Người Dùng' }}</span>
                                     </span>
+                                    
                                 </span>
                             </button>
                         </div>
                         <div class="dropdown topbar-head-dropdown ms-1 header-item">
-                            <a class="dropdown-item" href="auth-logout-basic.html"><i
-                                    class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
-                                    class="align-middle" data-key="t-logout">Logout</span></a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn">
+                                    <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
+                                    <span class="align-middle" data-key="t-logout">Logout</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -162,8 +167,8 @@
                             <div class="collapse menu-dropdown" id="sidebarProducts">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="" class="nav-link fs-5" data-key="t-analytics"
-                                            data-title="Products > List Products">List User</a>
+                                        <a href="{{ route('admin.user.edit', ['id' => Auth::user()->id]) }}" class="nav-link fs-5" data-key="t-analytics"
+                                            data-title="User > edit User"> edit User</a>
                                     </li>
                                 </ul>
                             </div>
@@ -188,33 +193,49 @@
                 @yield('content')
             </div>
         </div>
-
     </div>
 
     <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const titleElement = document.getElementById("page-title");
 
-    <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
-    <script src="{{asset('assets/libs/node-waves/waves.min.js')}}"></script>
-    <script src="{{asset('assets/libs/feather-icons/feather.min.js')}}"></script>
-    <script src="{{asset('assets/js/pages/plugins/lord-icon-2.1.0.js')}}"></script>
-    <script src="{{asset('assets/js/plugins.js')}}"></script>
+            document.querySelectorAll('[data-title]').forEach(link => {
+                link.addEventListener("click", function(e) {
+                    const title = this.getAttribute("data-title");
+                    if (titleElement && title) {
+                        titleElement.textContent = title;
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins.js') }}"></script>
 
     <!-- apexcharts -->
-    <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
     <!-- Vector map-->
-    <script src="{{asset('assets/libs/jsvectormap/js/jsvectormap.min.js')}}"></script>
-    <script src="{{asset('assets/libs/jsvectormap/maps/world-merc.js')}}"></script>
+    <script src="{{ asset('assets/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/jsvectormap/maps/world-merc.js') }}"></script>
 
     <!--Swiper slider js-->
-    <script src="{{asset('assets/libs/swiper/swiper-bundle.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
 
     <!-- Dashboard init -->
-    <script src="{{asset('assets/js/pages/dashboard-ecommerce.init.js')}}"></script>
+    <script src="{{ asset('assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
 
     <!-- App js -->
+
     <script src="{{asset('assets/js/app.js')}}"></script>
+
 </body>
 
 </html>

@@ -49,10 +49,12 @@ class AuthController extends Controller
             ]);
         }
 
-        if (Auth::attempt($request->validated())) {
-            RateLimiter::clear($key);
-            $request->session()->regenerate();
-            return redirect()->intended('/');
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            RateLimiter::clear($key); // Xóa đếm khi đăng nhập thành công
+            $request->session()->regenerate(); // Bảo mật session
+
+            return redirect()->route('admin.dashboard');
         }
 
         RateLimiter::hit($key, 60);
@@ -64,7 +66,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('login');
     }
 
     public function showRegisterForm()
