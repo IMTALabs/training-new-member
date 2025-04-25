@@ -11,7 +11,8 @@
                 <div class="row">
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Tên Sản Phẩm</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Nhập tên sản phẩm" value="{{ old('name') }}">
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                            placeholder="Nhập tên sản phẩm" value="{{ old('name') }}">
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -22,7 +23,8 @@
                         <select name="category_id" class="form-select @error('category_id') is-invalid @enderror">
                             <option value="">Chọn danh mục</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -34,7 +36,9 @@
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Giá Nhập</label>
-                        <input type="number" name="import_price" step="0.01" class="form-control @error('import_price') is-invalid @enderror" value="{{ old('import_price') }}">
+                        <input type="number" name="import_price" step="0.01"
+                            class="form-control @error('import_price') is-invalid @enderror"
+                            value="{{ old('import_price') }}">
                         @error('import_price')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -42,7 +46,8 @@
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Giá Bán</label>
-                        <input type="number" name="price" step="0.01" class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}">
+                        <input type="number" name="price" step="0.01"
+                            class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}">
                         @error('price')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -50,12 +55,14 @@
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Giá Khuyến Mãi</label>
-                        <input type="number" name="discount_price" step="0.01" class="form-control" value="{{ old('discount_price') }}">
+                        <input type="number" name="discount_price" step="0.01" class="form-control"
+                            value="{{ old('discount_price') }}">
                     </div>
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Số Lượng</label>
-                        <input type="number" name="quantity" class="form-control @error('quantity') is-invalid @enderror" value="{{ old('quantity') }}">
+                        <input type="number" name="quantity" class="form-control @error('quantity') is-invalid @enderror"
+                            value="{{ old('quantity') }}">
                         @error('quantity')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -68,7 +75,8 @@
 
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Đánh Giá (1-5)</label>
-                        <input type="number" name="rating" class="form-control" step="0.1" min="0" max="5" value="{{ old('rating', 0) }}">
+                        <input type="number" name="rating" class="form-control" step="0.1" min="0"
+                            max="5" value="{{ old('rating', 0) }}">
                     </div>
 
                     <div class="mb-3 col-md-6">

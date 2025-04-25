@@ -127,7 +127,7 @@
                             <div class="collapse menu-dropdown" id="sidebarCategories">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link fs-5" data-key="t-analytics"
+                                        <a href="{{route('admin.categories.index')}}" class="nav-link fs-5" data-key="t-analytics"
                                             data-title="Categories > List Categories">List Categories</a>
                                     </li>
                                     <li class="nav-item">
@@ -154,7 +154,7 @@
                                         <a href="{{route('admin.products.create')}}" class="nav-link fs-5" data-key="t-crm"
                                             data-title="Products > Add Product">Add Product</a>
                                     </li>
-                                    
+
                                 </ul>
                             </div>
                         </li>
