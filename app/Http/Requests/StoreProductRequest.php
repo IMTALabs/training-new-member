@@ -30,7 +30,7 @@ class StoreProductRequest extends FormRequest
                 'quantity' => 'required|integer|min:0',
                 'views' => 'nullable|integer|min:0',
                 'rating' => 'nullable|numeric|min:0|max:5',
-                'status' => 'required|in:active,inactive',
+                'status' => 'required|in:1,2',
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'description' => 'nullable|string',
         ];
