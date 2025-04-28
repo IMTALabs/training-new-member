@@ -22,15 +22,15 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'           => 'required|string|max:255',
+           'name'           => 'required|string|max:255',
             'category_id'    => 'required|exists:categories,id',
-            'price'          => 'required|numeric',
-            'import_price'   => 'nullable|numeric',
-            'discount_price' => 'nullable|numeric',
+            'price'          => 'required|numeric|min:0', // đảm bảo giá không âm
+            'import_price'   => 'nullable|numeric|min:0', // giá nhập không âm
+            'discount_price' => 'nullable|numeric|min:0|lte:price', // giá khuyến mãi không lớn hơn giá gốc
             'quantity'       => 'required|integer|min:0',
-            'status'         => 'required|string',
+            'status'         => 'required|string|in:1,2',
             'description'    => 'nullable|string',
-            'image'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ];
+            'image'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // ảnh có thể không bắt buộc
+         ];
     }
 }

@@ -101,12 +101,16 @@
                                     <td>{{$item->name}}</td>
                                     <td>{{$item->category->name}}</td>
                                     <td>{{number_format($item->price)}}</td>
-                                    <td><img src="{{asset('storage/' . $item->image)}}" alt="{{$item->name}}"></td>
+                                    <td><img src="{{asset('storage/' . $item->image)}}" alt="{{$item->name}} " width="100"></td>
                                     <td><span
                                             class="badge bg-success-subtle text-success text-uppercase">{{$item->status}}</span>
                                     </td>
                                     <td>
                                         <div class="d-flex gap-2">
+                                             <!-- Nút sửa -->
+                                             <a href="{{ route('admin.product.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                                                Edit
+                                            </a>
                                             <form action="{{ route('admin.product.destroy', $item->id) }}" method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this product?')">
                                                 @csrf

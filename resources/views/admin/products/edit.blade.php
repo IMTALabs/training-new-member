@@ -8,7 +8,7 @@
     <div class="container mt-4">
         <div class="card shadow-lg p-4">
             <h2 class="text-center mb-4">Edit Product</h2>
-            <form action="{{ route('admin.products.update', $product->id) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('admin.product.update', $product->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -70,11 +70,9 @@
                     <div class="mb-3 col-md-6">
                         <label class="form-label">Trạng Thái</label>
                         <select name="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Hiện
-                            </option>
-                            <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>
-                                Ẩn</option>
-                        </select>
+                            <option value="1" {{ old('status', $product->status) == 1 ? 'selected' : '' }}>Hiện</option>
+                            <option value="2" {{ old('status', $product->status) == 2 ? 'selected' : '' }}>Ẩn</option>
+                        </select>                        
                         @error('status')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

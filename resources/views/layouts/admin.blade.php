@@ -151,7 +151,7 @@
                                             data-title="Products > List Products">List Products</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('admin.products.create')}}" class="nav-link fs-5" data-key="t-crm"
+                                        <a href="{{route('admin.product.create')}}" class="nav-link fs-5" data-key="t-crm"
                                             data-title="Products > Add Product">Add Product</a>
                                     </li>
 

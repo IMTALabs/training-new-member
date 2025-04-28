@@ -27,7 +27,7 @@ class UpdateProfileRequest extends FormRequest
             'phone_number' => 'required|string|max:20',
             'address' => 'required|string|max:500',
             'date_of_birth' => 'required|date',
-            'gender' => 'required|in:Nam,Nữ',
+            'gender' => 'required|in:male,female',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }

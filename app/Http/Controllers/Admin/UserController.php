@@ -50,9 +50,14 @@ class UserController extends Controller
         }
 
         // Cập nhật thông tin người dùng
-        $user->update($data);
+        // Gán dữ liệu mới
+        $user->fill($data);
+
+        // Lưu lại
+        $user->save();
+
 
         // Quay lại trang chỉnh sửa với thông báo thành công
-        return redirect()->route('profile.edit')->with('success', 'Cập nhật thông tin thành công!');
+        return redirect()->route('admin.user.edit' , ['id' => Auth::user()->id])->with('success', 'Cập nhật thông tin thành công!');
     }
 }
